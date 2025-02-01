@@ -1,19 +1,15 @@
 package iut.nantes.project.stores
 
-import io.mockk.InternalPlatformDsl.toArray
-import iut.nantes.project.stores.Controller.ContactController
+
 import iut.nantes.project.stores.DTO.ContactDTO
 import iut.nantes.project.stores.DTO.AddressDTO
 import iut.nantes.project.stores.Exception.ContactException
-import iut.nantes.project.stores.Repository.StoreRepository
 import iut.nantes.project.stores.Service.ContactService
 import org.mockito.Mockito.doNothing
 import org.mockito.kotlin.*
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Assertions.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
@@ -21,7 +17,6 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import java.util.*
 
 @SpringBootTest
 @AutoConfigureMockMvc
