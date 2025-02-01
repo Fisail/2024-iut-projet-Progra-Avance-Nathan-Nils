@@ -23,7 +23,7 @@ class ProductServiceTest {
     private val productService = ProductService(productRepository, familyRepository)
 
     @Test
-    fun createProductShouldThrowInvalidIdFormatExceptionWhenFamilyIdIsNull() {
+    fun `test create product with bad format ID`() {
         val productDto = ProductDTO(UUID.randomUUID(), "Test Product", "Description", PriceDTO(100.0, "EUR"), FamilyDTO(null, "Test Family", "Description"))
 
         assertThrows<FamilyException.InvalidIdFormatException> {
@@ -32,7 +32,7 @@ class ProductServiceTest {
     }
 
     @Test
-    fun createProductShouldThrowFamilyNotFoundExceptionWhenFamilyDoesNotExist() {
+    fun`test create product with family not existing`() {
         val productDto = ProductDTO(UUID.randomUUID(), "Test Product", "Description",  PriceDTO(100.0, "EUR"), FamilyDTO(UUID.randomUUID(), "Test Family", "Description"))
         whenever(familyRepository.findById(any())).thenReturn(Optional.empty())
 
@@ -42,77 +42,92 @@ class ProductServiceTest {
     }
 
     @Test
-    fun createProductShouldSaveAndReturnProductDTOWhenFamilyExists() {
-        val familyEntity = FamilyEntity(UUID.randomUUID(), "Test Family", "Description")
-        val productDto = ProductDTO(UUID.randomUUID(), "Test Product", "Description",  PriceDTO(100.0, "EUR"), familyEntity.toDto())
-        val productEntity = ProductEntity(UUID.randomUUID(), productDto.name, productDto.description, productDto.price.toEntity(), familyEntity)
+    fun`test create product with family exising`() {
+            val familyEntity = FamilyEntity(UUID.randomUUID(), "Test Family", "Description")
+            val productDto = ProductDTO(
+                UUID.randomUUID(),
+                "Test Product",
+                "Description",
+                PriceDTO(100.0, "EUR"),
+                familyEntity.toDto()
+            )
+            val productEntity = ProductEntity(
+                UUID.randomUUID(),
+                productDto.name,
+                productDto.description,
+                productDto.price.toEntity(),
+                familyEntity
+            )
 
-        whenever(familyRepository.findById(any())).thenReturn(Optional.of(familyEntity))
-        doAnswer {
-            val argument = it.getArgument(0) as ProductEntity
-            assertNotNull(argument)
-            assertEquals(productDto.name, argument.name)
-            assertEquals(productDto.description, argument.description)
-            assertEquals(productDto.price.amount, argument.price.amount)
-            productEntity
-        }.whenever(productRepository).save(any())
+            whenever(familyRepository.findById(any())).thenReturn(Optional.of(familyEntity))
+            doAnswer {
+                val argument = it.getArgument(0) as ProductEntity
+                assertNotNull(argument)
+                assertEquals(productDto.name, argument.name)
+                assertEquals(productDto.description, argument.description)
+                assertEquals(productDto.price.amount, argument.price.amount)
+                productEntity
+            }.whenever(productRepository).save(any())
 
-        val createdProduct = productService.createProduct(productDto)
+            val createdProduct = productService.createProduct(productDto)
 
-        assertNotNull(createdProduct)
-        assertEquals(productDto.name, createdProduct.name)
-    }
-
-    @Test
-    fun getAllProductsShouldThrowIllegalArgumentExceptionWhenMinPriceIsGreaterThanOrEqualToMaxPrice() {
-        assertThrows<IllegalArgumentException> {
-            productService.getAllProducts(null, 100.0, 50.0)
+            assertNotNull(createdProduct)
+            assertEquals(productDto.name, createdProduct.name)
         }
-    }
 
-    @Test
-    fun getAllProductsShouldReturnProductDTOListWhenConditionsAreMet() {
-        val familyEntity = FamilyEntity(UUID.randomUUID(), "Test Family", "Description")
-        val productEntity = ProductEntity(UUID.randomUUID(), "Test Product", "Description", PriceEntity(100.0, "EUR"), familyEntity)
-        whenever(productRepository.findAll()).thenReturn(listOf(productEntity))
-
-        val products = productService.getAllProducts(null, null, null)
-
-        assertFalse(products.isEmpty())
-        assertEquals(1, products.size)
-        assertEquals("Test Product", products[0].name)
-    }
-
-    @Test
-    fun getProductByIdShouldThrowProductNotFoundExceptionWhenProductDoesNotExist() {
-        val id = UUID.randomUUID()
-        whenever(productRepository.findById(id.toString())).thenReturn(Optional.empty())
-
-        assertThrows<ProductException.ProductNotFoundException> {
-            productService.getProductById(id)
+        @Test
+        fun `test get all products with minPrice superior maxPrice`() {
+            assertThrows<IllegalArgumentException> {
+                productService.getAllProducts(null, 100.0, 50.0)
+            }
         }
-    }
 
-    @Test
-    fun getProductByIdShouldReturnProductDTOWhenProductExists() {
-        val id = UUID.randomUUID()
-        val familyEntity = FamilyEntity(UUID.randomUUID(), "Test Family", "Description")
-        val productEntity = ProductEntity(id, "Test Product", "Description", PriceEntity(100.0, "EUR"), familyEntity)
-        whenever(productRepository.findById(id.toString())).thenReturn(Optional.of(productEntity))
+        @Test
+        fun `test get all products`() {
+            val familyEntity = FamilyEntity(UUID.randomUUID(), "Test Family", "Description")
+            val productEntity =
+                ProductEntity(UUID.randomUUID(), "Test Product", "Description", PriceEntity(100.0, "EUR"), familyEntity)
+            whenever(productRepository.findAll()).thenReturn(listOf(productEntity))
 
-        val productDto = productService.getProductById(id)
+            val products = productService.getAllProducts(null, null, null)
 
-        assertNotNull(productDto)
-        assertEquals(productEntity.name, productDto.name)
-    }
-
-    @Test
-    fun deleteProductShouldThrowProductNotFoundExceptionWhenProductDoesNotExist() {
-        val id = UUID.randomUUID()
-        whenever(productRepository.findById(id.toString())).thenReturn(Optional.empty())
-
-        assertThrows<ProductException.ProductNotFoundException> {
-            productService.deleteProduct(id)
+            assertFalse(products.isEmpty())
+            assertEquals(1, products.size)
+            assertEquals("Test Product", products[0].name)
         }
-    }
+
+        @Test
+        fun `test get product by with not existing product`() {
+            val id = UUID.randomUUID()
+            whenever(productRepository.findById(id.toString())).thenReturn(Optional.empty())
+
+            assertThrows<ProductException.ProductNotFoundException> {
+                productService.getProductById(id)
+            }
+        }
+
+        @Test
+        fun `test get product by id is correct`() {
+            val id = UUID.randomUUID()
+            val familyEntity = FamilyEntity(UUID.randomUUID(), "Test Family", "Description")
+            val productEntity =
+                ProductEntity(id, "Test Product", "Description", PriceEntity(100.0, "EUR"), familyEntity)
+            whenever(productRepository.findById(id.toString())).thenReturn(Optional.of(productEntity))
+
+            val productDto = productService.getProductById(id)
+
+            assertNotNull(productDto)
+            assertEquals(productEntity.name, productDto.name)
+        }
+
+        @Test
+        fun `test service delete product not existing`() {
+            val id = UUID.randomUUID()
+            whenever(productRepository.findById(id.toString())).thenReturn(Optional.empty())
+
+            assertThrows<ProductException.ProductNotFoundException> {
+                productService.deleteProduct(id)
+            }
+        }
+
 }

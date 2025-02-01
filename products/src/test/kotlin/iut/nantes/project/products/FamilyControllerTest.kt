@@ -26,7 +26,7 @@ class FamilyControllerTest {
     private lateinit var familyService: FamilyService
 
     @Test
-    fun createFamilyShouldReturnCreatedStatus() {
+    fun `test create family is correct`(){
         val familyDto = FamilyDTO(UUID.randomUUID(), "Test Family", "Description")
         whenever(familyService.createFamily(any())).thenReturn(familyDto)
 
@@ -38,7 +38,7 @@ class FamilyControllerTest {
     }
 
     @Test
-    fun getAllFamiliesShouldReturnOkStatus() {
+    fun `test return all families`()  {
         val familyDto = FamilyDTO(UUID.randomUUID(), "Test Family", "Description")
         whenever(familyService.getAllFamilies()).thenReturn(listOf(familyDto))
 
@@ -48,7 +48,7 @@ class FamilyControllerTest {
     }
 
     @Test
-    fun getFamilyByIdShouldReturnOkStatus() {
+    fun `test getID with family existing`() {
         val id = UUID.randomUUID()
         val familyDto = FamilyDTO(id, "Test Family", "Description")
         whenever(familyService.getFamilyById(id)).thenReturn(familyDto)
@@ -59,7 +59,7 @@ class FamilyControllerTest {
     }
 
     @Test
-    fun updateFamilyShouldReturnOkStatus() {
+    fun `test update existing family`() {
         val id = UUID.randomUUID()
         val familyDto = FamilyDTO(id, "Updated Family", "Updated Description")
         whenever(familyService.updateFamily(eq(id), any())).thenReturn(familyDto)
@@ -72,7 +72,7 @@ class FamilyControllerTest {
     }
 
     @Test
-    fun deleteFamilyShouldReturnNoContentStatus() {
+    fun`test delete family no existing`(){
         val id = UUID.randomUUID()
         doNothing().whenever(familyService).deleteFamily(id)
 

@@ -41,7 +41,7 @@ class ProductControllerTest {
     }
 
     @Test
-    fun createProductShouldReturnCreatedStatus() {
+    fun `test create product is correct`() {
         val famille = FamilyDTO(UUID.randomUUID(), "Test Family", "Description")
         whenever(familleService.createFamily(any())).thenReturn(famille)
         val productDto = ProductDTO(UUID.randomUUID(), "Test Product", "Description", PriceDTO(100.0, "EUR"),famille )
@@ -56,7 +56,7 @@ class ProductControllerTest {
 
 
     @Test
-    fun createProductShouldReturnError() {
+    fun `test create product with no existing family`() {
         val productDto = ProductDTO(UUID.randomUUID(), "Test Product", "Description", PriceDTO(100.0, "EUR"), FamilyDTO(null, "testest", "lala"))
         whenever(productService.createProduct(any())).thenThrow(FamilyException.FamilyNotFoundException::class.java)
 
@@ -67,7 +67,7 @@ class ProductControllerTest {
     }
 
     @Test
-    fun getAllProductsShouldReturnOkStatus() {
+    fun `test get all products`() {
         val productDto = ProductDTO(UUID.randomUUID(), "Test Product", "Description", PriceDTO(100.0, "EUR"), FamilyDTO(UUID.randomUUID(), "Test Family", "Description"))
         whenever(productService.getAllProducts(anyOrNull(), anyOrNull(), anyOrNull())).thenReturn(listOf(productDto))
 
@@ -77,7 +77,7 @@ class ProductControllerTest {
     }
 
     @Test
-    fun getProductByIdShouldReturnOkStatus() {
+    fun `test get product by id`() {
         val id = UUID.randomUUID()
         val productDto = ProductDTO(id, "Test Product", "Description", PriceDTO(100.0, "EUR"), FamilyDTO(UUID.randomUUID(), "Test Family", "Description"))
         whenever(productService.getProductById(id)).thenReturn(productDto)
@@ -88,7 +88,7 @@ class ProductControllerTest {
     }
 
     @Test
-    fun updateProductShouldReturnOkStatus() {
+    fun `test update product`() {
         val id = UUID.randomUUID()
         val productDto = ProductDTO(id, "Updated Product", "Updated Description", PriceDTO(200.0, "EUR"), FamilyDTO(UUID.randomUUID(), "Test Family", "Updated Description"))
         whenever(productService.updateProduct(eq(id), any())).thenReturn(productDto)
@@ -101,7 +101,7 @@ class ProductControllerTest {
     }
 
     @Test
-    fun deleteProductShouldReturnNoContentStatus() {
+    fun `test delete product no existing`() {
         val id = UUID.randomUUID()
         doNothing().whenever(productService).deleteProduct(id)
 

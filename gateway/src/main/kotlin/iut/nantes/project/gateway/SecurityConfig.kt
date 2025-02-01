@@ -16,11 +16,9 @@ class SecurityConfig(
     @Autowired private val env: org.springframework.core.env.Environment
 ) {
 
-    // Bean PasswordEncoder
     @Bean
     fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder()
 
-    // Configuration de l'authentification
     @Autowired
     fun configureAuthentication(auth: AuthenticationManagerBuilder) {
         val securityMode = env.getProperty("gateway.security") ?: "database"
@@ -51,13 +49,15 @@ class SecurityConfig(
         }
     }
 
-    // Configuration de la sécurité HTTP
     @Throws(Exception::class)
     fun configureHttpSecurity(http: HttpSecurity) {
         http
-            .authorizeRequests()
-            .requestMatchers("/api/v1/user").permitAll()
-            .requestMatchers("/**").hasRole("ADMIN")
-
+            .authorizeHttpRequests { requests ->
+                requests
+                    .requestMatchers("/api/v1/user").permitAll()
+                    .requestMatchers("/**").hasRole("ADMIN")
+            }
+            .httpBasic { }
+            .csrf { it.disable() }
     }
 }

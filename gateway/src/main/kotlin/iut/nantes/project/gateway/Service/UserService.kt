@@ -4,16 +4,18 @@ import iut.nantes.project.gateway.Entity.UserDTO
 import iut.nantes.project.gateway.Entity.UserEntity
 import iut.nantes.project.gateway.Repository.UserRepository
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.stereotype.Service
 import java.util.*
 
+@Service
 class UserService(private val userRepository: UserRepository) {
 
     private val passwordEncoder = BCryptPasswordEncoder()
 
-    fun createUser(user : UserDTO): UserEntity {
-        val encodedPassword = passwordEncoder.encode(user.password)
-        val user = UserEntity(null, user.login, encodedPassword,  user.isAdmin)
-        return userRepository.save(user)
+    fun createUser(userDTO: UserDTO): UserEntity {
+        val encodedPassword = passwordEncoder.encode(userDTO.password)
+        val userEntity = UserEntity(null, userDTO.login, encodedPassword, userDTO.isAdmin)
+        return userRepository.save(userEntity)
     }
 
     fun findByLogin(login: String): Optional<UserEntity> {

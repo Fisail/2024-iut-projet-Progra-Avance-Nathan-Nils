@@ -15,7 +15,7 @@ class FamilyServiceTest {
  private val familyService = FamilyService(familyRepository)
 
  @Test
- fun createFamilyShouldThrowNameConflictExceptionWhenFamilyNameExists() {
+ fun `test create family with name using already on other family`() {
   val familyDto = FamilyDTO(UUID.randomUUID(), "Test Family", "Description")
   familyRepository.families.add(FamilyEntity(UUID.randomUUID(), familyDto.name, familyDto.description))
 
@@ -25,7 +25,7 @@ class FamilyServiceTest {
  }
 
  @Test
- fun createFamilyShouldSaveAndReturnFamilyDTOWhenFamilyNameDoesNotExist() {
+ fun `test create family`() {
   val familyDto = FamilyDTO(UUID.randomUUID(), "Test Family", "Description")
 
   val createdFamily = familyService.createFamily(familyDto)
@@ -35,7 +35,7 @@ class FamilyServiceTest {
  }
 
  @Test
- fun getFamilyByIdShouldThrowFamilyNotFoundExceptionWhenFamilyDoesNotExist() {
+ fun `test get family with no existing family`() {
   val id = UUID.randomUUID()
 
   assertThrows<FamilyException.FamilyNotFoundException> {
@@ -44,7 +44,7 @@ class FamilyServiceTest {
  }
 
  @Test
- fun getFamilyByIdShouldReturnFamilyDTOWhenFamilyExists() {
+ fun `test get family with existing family`() {
   val id = UUID.randomUUID()
   val familyEntity = FamilyEntity(id, "Test Family", "Description")
   familyRepository.families.add(familyEntity)
@@ -56,7 +56,7 @@ class FamilyServiceTest {
  }
 
  @Test
- fun deleteFamilyShouldThrowFamilyNotFoundExceptionWhenFamilyDoesNotExist() {
+ fun `test delete family not existing`(){
   val id = UUID.randomUUID()
 
   assertThrows<FamilyException.FamilyNotFoundException> {
