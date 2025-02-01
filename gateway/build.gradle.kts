@@ -43,6 +43,9 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("com.h2database:h2") // Exemple avec une base en mémoire (H2)
 
+	testImplementation("org.springframework.security:spring-security-test")
+
+
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 }
 

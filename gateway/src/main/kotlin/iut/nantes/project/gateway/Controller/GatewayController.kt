@@ -1,6 +1,5 @@
 package iut.nantes.project.gateway.Controller
 
-
 import iut.nantes.project.gateway.Entity.UserDTO
 import iut.nantes.project.gateway.Service.UserService
 import iut.nantes.project.products.DTO.ProductDTO
@@ -14,15 +13,15 @@ class GatewayController(private val userService: UserService) {
 
     private val webClient: WebClient = WebClient.create()
 
-    @PostMapping
+    @PostMapping("/user")
     fun createUser(@RequestBody userDTO: UserDTO): ResponseEntity<String> {
         userService.createUser(userDTO)
         return ResponseEntity.ok("User created successfully")
     }
 
     @GetMapping("/products")
-    fun getProducts(@RequestHeader("X-User") user: String): ResponseEntity<List<ProductDTO>> {
-        val response = webClient.get().uri("http://products-service/api/v1/products")
+    fun getAllProductWithRoleAdmin(@RequestHeader("X-User") user: String): ResponseEntity<List<ProductDTO>> {
+        val response = webClient.get().uri("http://localhost:8081/api/v1/products")
             .header("X-User", user)
             .retrieve()
             .bodyToFlux(ProductDTO::class.java)
