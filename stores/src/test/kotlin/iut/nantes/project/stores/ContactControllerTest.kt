@@ -46,7 +46,7 @@ class ContactControllerTest {
 
     //Pb ne prend pas en compte les formatages des paramètres
     @Test
-    fun createInvalidContact() {
+    fun `test create invalid contact`() {
         mockMvc.perform(
             post("/api/v1/contacts")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -55,7 +55,7 @@ class ContactControllerTest {
     }
 
     @Test
-    fun getContactsByCity() {
+    fun `test get contact by city`() {
         whenever(contactService.getContactsByCity(any())).thenReturn(listOf(contactDto, contactDto))
 
         mockMvc.perform(
@@ -65,7 +65,7 @@ class ContactControllerTest {
     }
 
     @Test
-    fun getContactByValidId() {
+    fun `test get contact by valid ID`() {
         whenever(contactService.getContactById(any())).thenReturn(contactDto)
 
         mockMvc.perform(
@@ -74,7 +74,7 @@ class ContactControllerTest {
     }
 
     @Test
-    fun getContactByInvalidId() {
+    fun `test get contact by invalid ID`() {
         whenever(contactService.getContactById(any())).thenThrow(ContactException.ContactNotFoundException())
 
         mockMvc.perform(
@@ -83,7 +83,7 @@ class ContactControllerTest {
     }
 
     @Test
-    fun getContactByIdIllegalArgument() {
+    fun `test get contact by Illegal ID`() {
         whenever(contactService.getContactById(any())).thenThrow(ContactException.InvalidIdFormatException())
 
         mockMvc.perform(
@@ -92,7 +92,7 @@ class ContactControllerTest {
     }
 
     @Test
-    fun updateContact() {
+    fun `test update valid contact`() {
         whenever(contactService.updateContact(eq(1), any())).thenReturn(contactDto)
 
         mockMvc.perform(
@@ -103,7 +103,7 @@ class ContactControllerTest {
     }
 
     @Test
-    fun updateInvalidContact() {
+    fun `test update invalid contact`() {
         whenever(contactService.updateContact(eq(1), any())).thenThrow(ContactException.InvalidDataException())
 
         mockMvc.perform(
@@ -114,7 +114,7 @@ class ContactControllerTest {
     }
 
     @Test
-    fun deleteContact() {
+    fun `test delete valid contact`() {
         doNothing().whenever(contactService).deleteContact(any())
 
         mockMvc.perform(
@@ -123,7 +123,7 @@ class ContactControllerTest {
     }
 
     @Test
-    fun deleteInvalidIDContact() {
+    fun `test update invalid ID contact`() {
         whenever(contactService.deleteContact(any())).thenThrow(ContactException.InvalidIdFormatException())
 
         mockMvc.perform(
@@ -132,7 +132,7 @@ class ContactControllerTest {
     }
 
     @Test
-    fun deleteContactIsInAStore() {
+    fun `test delete contact already in store`() {
         whenever(contactService.deleteContact(any())).thenThrow(ContactException.ContactIsInAStoreException())
 
         mockMvc.perform(
