@@ -5,10 +5,12 @@ import iut.nantes.project.gateway.Service.UserService
 import iut.nantes.project.products.DTO.ProductDTO
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.reactive.function.client.WebClient
 
 @RestController
+@EnableMethodSecurity
 @RequestMapping("/api/v1")
 class GatewayController(private val userService: UserService) {
 

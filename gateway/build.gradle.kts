@@ -27,7 +27,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-security")
 
 	implementation("org.springframework.boot:spring-boot-starter-webflux")
-
+	testImplementation("org.springframework.security:spring-security-test")
 	implementation(project(":products"))
 
 	implementation("io.github.oshai:kotlin-logging-jvm:7.0.3")
