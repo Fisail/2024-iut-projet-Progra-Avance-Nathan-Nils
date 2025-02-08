@@ -6,9 +6,14 @@ import iut.nantes.project.products.Exception.FamilyException
 import iut.nantes.project.products.Exception.ProductException
 import iut.nantes.project.products.Repository.FamilyRepositoryCustom
 import iut.nantes.project.products.Repository.ProductRepositoryCustom
+import iut.nantes.project.products.Service.WebProductSrvice
 import java.util.*
 
-class ProductService(private val productRepository: ProductRepositoryCustom, private val familyRepository: FamilyRepositoryCustom) {
+class ProductService(private val productRepository: ProductRepositoryCustom, private val familyRepository: FamilyRepositoryCustom, private val webProductSrvice: WebProductSrvice) {
+
+
+
+
 
     fun createProduct(productDto: ProductDTO): ProductDTO {
         val familyId = productDto.family.id ?: throw FamilyException.InvalidIdFormatException()
@@ -68,7 +73,8 @@ class ProductService(private val productRepository: ProductRepositoryCustom, pri
     }
 
     private fun productHasStock(product: ProductEntity): Boolean {
-        // TODO : A IMPLEMENTER QUAND STORE SERA IMPLEMENTE
-        return false
+        return webProductSrvice.isProductOnStore(product.id)
     }
+
+
 }

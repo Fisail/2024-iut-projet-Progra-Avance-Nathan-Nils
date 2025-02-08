@@ -44,6 +44,10 @@ dependencies {
 	testImplementation ("org.mockito:mockito-core")
 	testImplementation ("org.mockito.kotlin:mockito-kotlin:4.0.0")
 
+	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("org.springframework.boot:spring-boot-starter-webflux")
+	// autres dépendances nécessaires
+
 	implementation("io.github.oshai:kotlin-logging-jvm:7.0.3")
 }
 

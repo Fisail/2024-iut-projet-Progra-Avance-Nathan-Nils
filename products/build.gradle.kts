@@ -30,7 +30,7 @@ dependencies {
 
 
 
-
+	implementation("org.springframework.boot:spring-boot-starter-webflux")
 
 
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
@@ -44,7 +44,6 @@ dependencies {
 
 	testImplementation ("org.mockito:mockito-core")
 	testImplementation ("org.mockito.kotlin:mockito-kotlin:4.0.0")
-
 
 
 	implementation("io.github.oshai:kotlin-logging-jvm:7.0.3")
