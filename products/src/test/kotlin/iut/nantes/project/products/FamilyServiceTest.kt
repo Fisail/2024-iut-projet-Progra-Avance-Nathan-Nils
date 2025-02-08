@@ -11,80 +11,85 @@ import java.util.*
 
 class FamilyServiceTest {
 
- private val familyRepository = MockFamilyRepository()
- private val familyService = FamilyService(familyRepository)
+    private val familyRepository = MockFamilyRepository()
+    private val familyService = FamilyService(familyRepository)
 
- @Test
- fun `test create family with name using already on other family`() {
-  val familyDto = FamilyDTO(UUID.randomUUID(), "Test Family", "Description")
-  familyRepository.families.add(FamilyEntity(UUID.randomUUID(), familyDto.name, familyDto.description))
+    @Test
+    fun `test create family with name using already on other family`() {
+        val familyDto = FamilyDTO(UUID.randomUUID(), "Test Family", "Description")
+        familyRepository.families.add(FamilyEntity(UUID.randomUUID(), familyDto.name, familyDto.description))
 
-  assertThrows<FamilyException.NameConflictException> {
-   familyService.createFamily(familyDto)
-  }
- }
+        assertThrows<FamilyException.NameConflictException> {
+            familyService.createFamily(familyDto)
+        }
+    }
 
- @Test
- fun `test create family`() {
-  val familyDto = FamilyDTO(UUID.randomUUID(), "Test Family", "Description")
+    @Test
+    fun `test create family`() {
+        val familyDto = FamilyDTO(UUID.randomUUID(), "Test Family", "Description")
 
-  val createdFamily = familyService.createFamily(familyDto)
+        val createdFamily = familyService.createFamily(familyDto)
 
-  assertNotNull(createdFamily)
-  assertEquals(familyDto.name, createdFamily.name)
- }
+        assertNotNull(createdFamily)
+        assertEquals(familyDto.name, createdFamily.name)
+    }
 
- @Test
- fun `test get family with no existing family`() {
-  val id = UUID.randomUUID()
+    @Test
+    fun `test get family with no existing family`() {
+        val id = UUID.randomUUID()
 
-  assertThrows<FamilyException.FamilyNotFoundException> {
-   familyService.getFamilyById(id)
-  }
- }
+        assertThrows<FamilyException.FamilyNotFoundException> {
+            familyService.getFamilyById(id)
+        }
+    }
 
- @Test
- fun `test get family with existing family`() {
-  val id = UUID.randomUUID()
-  val familyEntity = FamilyEntity(id, "Test Family", "Description")
-  familyRepository.families.add(familyEntity)
+    @Test
+    fun `test get family with existing family`() {
+        val id = UUID.randomUUID()
+        val familyEntity = FamilyEntity(id, "Test Family", "Description")
+        familyRepository.families.add(familyEntity)
 
-  val familyDto = familyService.getFamilyById(id)
+        val familyDto = familyService.getFamilyById(id)
 
-  assertNotNull(familyDto)
-  assertEquals(familyEntity.name, familyDto.name)
- }
+        assertNotNull(familyDto)
+        assertEquals(familyEntity.name, familyDto.name)
+    }
 
- @Test
- fun `test delete family not existing`(){
-  val id = UUID.randomUUID()
+    @Test
+    fun `test delete family not existing`() {
+        val id = UUID.randomUUID()
 
-  assertThrows<FamilyException.FamilyNotFoundException> {
-   familyService.deleteFamily(id)
-  }
- }
+        assertThrows<FamilyException.FamilyNotFoundException> {
+            familyService.deleteFamily(id)
+        }
+    }
 }
 
+
+/*
+* Ce mock permet de simuler l'utilisation du FamilyRepositoryCustom quand nous utilisons une mutableListOf
+*
+ */
 class MockFamilyRepository : FamilyRepositoryCustom {
- val families = mutableListOf<FamilyEntity>()
+    val families = mutableListOf<FamilyEntity>()
 
- override fun existsByName(name: String): Boolean {
-  return families.any { it.name == name }
- }
+    override fun existsByName(name: String): Boolean {
+        return families.any { it.name == name }
+    }
 
- override fun save(family: FamilyEntity) {
-   families.add(family)
- }
+    override fun save(family: FamilyEntity) {
+        families.add(family)
+    }
 
- override fun findAll(): List<FamilyEntity> {
-  return families
- }
+    override fun findAll(): List<FamilyEntity> {
+        return families
+    }
 
- override fun findById(id: UUID): Optional<FamilyEntity> {
-  return families.find { it.id == id }?.let { Optional.of(it) } ?: Optional.empty()
- }
+    override fun findById(id: UUID): Optional<FamilyEntity> {
+        return families.find { it.id == id }?.let { Optional.of(it) } ?: Optional.empty()
+    }
 
- override fun delete(family: FamilyEntity) {
-  families.remove(family)
- }
+    override fun delete(family: FamilyEntity) {
+        families.remove(family)
+    }
 }

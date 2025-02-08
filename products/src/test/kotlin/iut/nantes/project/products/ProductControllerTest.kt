@@ -16,8 +16,6 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import java.util.*
-import com.fasterxml.jackson.databind.ObjectMapper
-import org.junit.jupiter.api.BeforeEach
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 
@@ -34,12 +32,6 @@ class ProductControllerTest {
     @MockBean
     private lateinit var familleService: FamilyService
 
-    private lateinit var objectMapper: ObjectMapper
-
-    @BeforeEach
-    fun setUp() {
-        objectMapper = ObjectMapper()
-    }
 
     @Test
     fun `test create product is correct`() {
@@ -58,12 +50,10 @@ class ProductControllerTest {
 
     @Test
     fun `test create product with no existing family`() {
-        val productDto = ProductDTO(UUID.randomUUID(), "Test Product", "Description", PriceDTO(100.0, "EUR"), FamilyDTO(null, "testest", "lala"))
         whenever(productService.createProduct(any())).thenThrow(FamilyException.FamilyNotFoundException::class.java)
 
         mockMvc.perform(post("/api/v1/products")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(productDto)))
+            .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isBadRequest)
     }
 

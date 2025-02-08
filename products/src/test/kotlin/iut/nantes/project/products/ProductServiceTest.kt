@@ -54,15 +54,10 @@ class ProductServiceTest {
                 PriceDTO(100.0, "EUR"),
                 familyEntity.toDto()
             )
-            val productEntity = ProductEntity(
-                UUID.randomUUID(),
-                productDto.name,
-                productDto.description,
-                productDto.price.toEntity(),
-                familyEntity
-            )
-
+            val productEntity = productDto.toEntity()
             whenever(familyRepository.findById(any())).thenReturn(Optional.of(familyEntity))
+
+            //On vérifie que que la méthode save traite et enregistre correctement productEntity.
             doAnswer {
                 val argument = it.getArgument(0) as ProductEntity
                 assertNotNull(argument)
