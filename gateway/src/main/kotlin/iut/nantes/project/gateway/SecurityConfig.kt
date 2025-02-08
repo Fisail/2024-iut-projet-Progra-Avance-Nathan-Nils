@@ -55,9 +55,11 @@ class SecurityConfig(
             .authorizeHttpRequests { requests ->
                 requests
                     .requestMatchers("/api/v1/user").permitAll()
+                    .requestMatchers("/api/v1/products").hasRole("ADMIN")
                     .requestMatchers("/**").hasRole("ADMIN")
             }
             .httpBasic { }
             .csrf { it.disable() }
     }
+
 }

@@ -4,6 +4,7 @@ import iut.nantes.project.gateway.Entity.UserDTO
 import iut.nantes.project.gateway.Service.UserService
 import iut.nantes.project.products.DTO.ProductDTO
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.reactive.function.client.WebClient
 
@@ -16,10 +17,11 @@ class GatewayController(private val userService: UserService) {
     @PostMapping("/user")
     fun createUser(@RequestBody userDTO: UserDTO): ResponseEntity<String> {
         userService.createUser(userDTO)
-        return ResponseEntity.ok("User created successfully")
+        return ResponseEntity.ok("Utilisateur crée !")
     }
 
     @GetMapping("/products")
+    @PreAuthorize("hasRole('ADMIN')")
     fun getAllProductWithRoleAdmin(@RequestHeader("X-User") user: String): ResponseEntity<List<ProductDTO>> {
         val response = webClient.get().uri("http://localhost:8081/api/v1/products")
             .header("X-User", user)
