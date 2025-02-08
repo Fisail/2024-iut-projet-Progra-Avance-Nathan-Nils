@@ -5,6 +5,17 @@
 
 © 2025 : Tous les développements du projet appartiennent aux membres de ce groupe.
 
+Gateway ✅
+Products ✅
+Stores ✅
+Families ✅
+Contacts ✅
+
+Notre branche principale est Zomzog/sujet (⚠️ ce n'est pas la branche MAIN ⚠️)
+Plusieurs tests ont été réalisés avec : 
+- CURL 
+- Tests Unitaires 
+
 == Rendu
 
 Le projet doit être rendu sous la forme d'un repository (gitlab ou github)
