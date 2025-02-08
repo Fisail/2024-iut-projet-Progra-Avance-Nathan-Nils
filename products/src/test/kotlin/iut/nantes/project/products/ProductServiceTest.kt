@@ -54,14 +54,7 @@ class ProductServiceTest {
                 PriceDTO(100.0, "EUR"),
                 familyEntity.toDto()
             )
-            val productEntity = ProductEntity(
-                UUID.randomUUID(),
-                productDto.name,
-                productDto.description,
-                productDto.price.toEntity(),
-                familyEntity
-            )
-
+            val productEntity = productDto.toEntity()
             whenever(familyRepository.findById(any())).thenReturn(Optional.of(familyEntity))
             doAnswer {
                 val argument = it.getArgument(0) as ProductEntity
