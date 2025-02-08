@@ -1,14 +1,14 @@
 package iut.nantes.project.products
 
 
-import iut.nantes.project.products.Controller.FamilyController
 import iut.nantes.project.products.DTO.FamilyDTO
 import iut.nantes.project.products.Service.FamilyService
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.doNothing
 import org.mockito.kotlin.*
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
+import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
@@ -16,7 +16,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import java.util.*
 
-@WebMvcTest(FamilyController::class)
+@SpringBootTest
+@AutoConfigureMockMvc
 class FamilyControllerTest {
 
     @Autowired
