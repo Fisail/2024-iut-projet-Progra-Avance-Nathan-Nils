@@ -3,6 +3,8 @@ package iut.nantes.project.stores.Controller
 import iut.nantes.project.stores.DTO.ProductStoreDTO
 import iut.nantes.project.stores.DTO.StoreDTO
 import iut.nantes.project.stores.Service.StoreService
+import jakarta.validation.Valid
+import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import java.util.UUID
 
@@ -11,7 +13,8 @@ import java.util.UUID
 class StoreController(private val storeService: StoreService) {
 
     @PostMapping
-    fun createStore(@RequestBody storeDTO: StoreDTO): StoreDTO {
+    @ResponseStatus(HttpStatus.CREATED)
+    fun createStore(@RequestBody @Valid storeDTO: StoreDTO): StoreDTO {
         return storeService.createStore(storeDTO)
     }
 
@@ -26,10 +29,11 @@ class StoreController(private val storeService: StoreService) {
     }
 
     @PutMapping("/{id}")
-    fun updateStore(@PathVariable id: Int, @RequestBody storeDTO: StoreDTO): StoreDTO {
+    fun updateStore(@PathVariable id: Int, @RequestBody @Valid storeDTO: StoreDTO): StoreDTO {
         return storeService.updateStore(id, storeDTO)
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     fun deleteStore(@PathVariable id: Int) {
         storeService.deleteStore(id)
@@ -39,8 +43,9 @@ class StoreController(private val storeService: StoreService) {
     fun addProductToStore(
         @PathVariable storeId: Int,
         @PathVariable productId: UUID,
-        @RequestParam(required = false) quantity: Int?
+        @RequestParam(required = false, defaultValue = "1") quantity: Int
     ): ProductStoreDTO {
+        println("hey")
         return storeService.addProductToStore(storeId, productId, quantity)
     }
 
@@ -48,15 +53,16 @@ class StoreController(private val storeService: StoreService) {
     fun removeProductFromStore(
         @PathVariable storeId: Int,
         @PathVariable productId: UUID,
-        @RequestParam(required = false) quantity: Int?
+        @RequestParam(required = false, defaultValue = "1") quantity: Int
     ): ProductStoreDTO {
         return storeService.removeProductFromStore(storeId, productId, quantity)
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{storeId}/products")
     fun deleteProductsFromStore(
         @PathVariable storeId: Int,
-        @RequestBody productIds: List<String>
+        @RequestBody productIds: List<UUID>
     ) {
         storeService.deleteProductsFromStore(storeId, productIds)
     }
