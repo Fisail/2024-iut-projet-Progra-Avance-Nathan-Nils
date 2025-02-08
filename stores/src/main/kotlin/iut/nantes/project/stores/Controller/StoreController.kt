@@ -60,4 +60,12 @@ class StoreController(private val storeService: StoreService) {
     ) {
         storeService.deleteProductsFromStore(storeId, productIds)
     }
+
+
+    @GetMapping("/products/{productId}/quantity")
+    fun isProductOnStore(
+        @PathVariable productId: UUID,
+    ): Boolean {
+        return storeService.isProductOnStore(productId)
+    }
 }

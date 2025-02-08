@@ -3,6 +3,7 @@ package iut.nantes.project.products.Config
 import iut.nantes.project.products.ProductService
 import iut.nantes.project.products.Repository.*
 import iut.nantes.project.products.Service.FamilyService
+import iut.nantes.project.products.Service.WebProductSrvice
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
@@ -28,6 +29,12 @@ class AppConfig {
     }
 
 
+    @Bean
+    fun webProductSrvice(): WebProductSrvice {
+        return WebProductSrvice()
+    }
+
+
 
     @Bean
     @Profile("!dev")
@@ -42,7 +49,7 @@ class AppConfig {
     }
 
     @Bean
-    fun productService(productRepository: ProductRepositoryCustom, familyRepository: FamilyRepositoryCustom): ProductService {
-        return ProductService(productRepository, familyRepository)
+    fun productService(productRepository: ProductRepositoryCustom, familyRepository: FamilyRepositoryCustom,webProductService : WebProductSrvice): ProductService {
+        return ProductService(productRepository, familyRepository, webProductService)
     }
 }

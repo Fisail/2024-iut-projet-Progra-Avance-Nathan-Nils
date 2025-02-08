@@ -19,7 +19,7 @@ class StoreService(
     private val storeRepository: StoreRepository,
     private val contactRepository: ContactRepository,
     private val webClientServiceProduct : WebClientService
-) {
+)  {
 
     fun createStore(storeDTO: StoreDTO): StoreDTO {
         val contact = storeDTO.contact.id?.let { contactRepository.findById(it).orElseThrow { ContactException.ContactNotFoundException() } }
@@ -37,7 +37,7 @@ class StoreService(
     }
 
 
-    fun getAllStores(): List<StoreDTO> {
+     fun getAllStores(): List<StoreDTO> {
         val stores = storeRepository.findAll().sortedBy { it.name }
         return stores.map { it.toDto() }
     }
@@ -140,6 +140,22 @@ class StoreService(
         }
 
         storeRepository.save(store)
+    }
+
+
+    fun isProductOnStore(productId: UUID): Boolean {
+        val allStores = getAllStores()
+
+        allStores.forEach { store ->
+            store.products.forEach { produit ->
+                if (produit.id == productId){
+                    return true
+                }
+            }
+        }
+
+        return false
+
     }
 
 

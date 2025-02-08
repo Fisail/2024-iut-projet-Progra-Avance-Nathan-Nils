@@ -10,6 +10,7 @@ import iut.nantes.project.products.Exception.FamilyException
 import iut.nantes.project.products.Exception.ProductException
 import iut.nantes.project.products.Repository.FamilyRepositoryCustom
 import iut.nantes.project.products.Repository.ProductRepositoryCustom
+import iut.nantes.project.products.Service.WebProductSrvice
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -20,7 +21,9 @@ class ProductServiceTest {
 
     private val productRepository: ProductRepositoryCustom = mock()
     private val familyRepository: FamilyRepositoryCustom = mock()
-    private val productService = ProductService(productRepository, familyRepository)
+    private val webProductSrvice: WebProductSrvice = mock()
+
+    private val productService = ProductService(productRepository, familyRepository,webProductSrvice)
 
     @Test
     fun `test create product with bad format ID`() {
