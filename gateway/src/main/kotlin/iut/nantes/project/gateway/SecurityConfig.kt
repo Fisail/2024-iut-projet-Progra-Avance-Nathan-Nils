@@ -42,24 +42,26 @@ class SecurityConfig(
                 user.login,
                 user.password,
                 listOf(
-                    if (user.isAdmin) SimpleGrantedAuthority("ROLE_ADMIN")
-                    else SimpleGrantedAuthority("ROLE_USER")
+                    if (user.isAdmin) SimpleGrantedAuthority("ADMIN")
+                    else SimpleGrantedAuthority("USER")
                 )
             )
         }
     }
 
     @Throws(Exception::class)
+    @Autowired
     fun configureHttpSecurity(http: HttpSecurity) {
         http
             .authorizeHttpRequests { requests ->
                 requests
-                    .requestMatchers("/api/v1/user").permitAll()
-                    .requestMatchers("/api/v1/products").hasRole("ADMIN")
+                    .requestMatchers("http://localhost:8080/api/v1/user").permitAll()
+                    .requestMatchers("http://localhost:8081/api/v1/products").hasRole("ADMIN")
                     .requestMatchers("/**").hasRole("ADMIN")
             }
             .httpBasic { }
             .csrf { it.disable() }
     }
+
 
 }

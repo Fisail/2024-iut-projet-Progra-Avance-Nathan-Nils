@@ -27,7 +27,7 @@ class SecurityTest {
     @Test
     @WithMockUser(username = "ADMIN", roles = ["ADMIN"])
     fun `test get all products with admin role`() {
-        mockMvc.perform(MockMvcRequestBuilders.get("localhost:8081/api/v1/products")
+        mockMvc.perform(MockMvcRequestBuilders.get("http://localhost:8081/api/v1/products")
             .header("X-User", "AdminUser"))
             .andExpect(MockMvcResultMatchers.status().isOk)
     }
@@ -35,14 +35,14 @@ class SecurityTest {
     @Test
     @WithMockUser(username = "USER", roles = ["USER"])
     fun `test access denied for non-admin user`() {
-        mockMvc.perform(MockMvcRequestBuilders.get("localhost:8081/api/v1/products")
+        mockMvc.perform(MockMvcRequestBuilders.get("http://localhost:8081/api/v1/products")
             .header("X-User", "User"))
             .andExpect(MockMvcResultMatchers.status().isForbidden)
     }
 
     @Test
     fun `test create user endpoint accessible by all`() {
-        mockMvc.perform(MockMvcRequestBuilders.post("localhost:8080/api/v1/user")
+        mockMvc.perform(MockMvcRequestBuilders.post("http://localhost:8080/api/v1/user")
             .contentType("application/json")
             .content("{\"login\": \"test\", \"password\": \"test\", \"isAdmin\": false}"))
             .andExpect(MockMvcResultMatchers.status().isOk)
